@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Andika+New+Basic&display=swap');
+
+.nav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.logo {
+    color: tomato;
+}
+
+h2 {
+    font-family: 'Andika New Basic',
+        sans-serif !important;
+}
