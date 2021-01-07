@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Chip, makeStyles, TextField,Button,Paper } from "@material-ui/core";
+import { Chip, makeStyles, TextField, Button, } from "@material-ui/core";
 import axios from "axios";
- import {style} from './css/Device.module.css';
-
+import  "./css/Device.module.css";
+import { Table } from 'antd';
+import 'antd/dist/antd.css';
+// material UI styling
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -15,45 +17,51 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
-    table: {
+  table: {
     minWidth: 650,
   },
 }));
+// material UI styling end
 function Device() {
   const classes = useStyles();
   const [tags, setTags] = useState([]);
   const [Data, setData] = useState([]);
-//   useEffect(()=>{
-//     const fetchApi =()=>{
-//         axios.post('http://localhost:4000/devices',
-//         {
-//             devices:tags
-//         }
-//         ) .then(res => {
-//           console.log(res.data)
-//         })
-//         .catch(err => console.log(err));
-//     }
-// },[])
- function fetchApi(){
-        axios.post('http://localhost:4000/devices',
-        {
-            devices:tags
-        }
-        ) .then(res => {
-          // setData=res.data
-          // console.log(res.data)
-          // setData({data:res})
-          // console.log(res.data);
-           let tmpArray = []
-            for (var i = 0; i < res.data.length; i++) {
-                tmpArray.push(data.data[i].NeededInfo)
-            }
-            setData(tmpArray)
-        })
-        .catch(err => console.log(err));
+  function fetchApi() {
+  var i = 0
+  while(i<10){
+    axios
+      .post("http://localhost:4000/devices/", {
+        devices: tags,
+      })
+      .then((res) => {
+        setData(prevData=> {return [res.data,...prevData]})
+        console.log(Data);
+      })
+      .catch((err) => console.log(err));
+      i++
     }
-    // const Component = ({ Data }) => <div>{Data}</div>
+    }
+const columns = [
+  {
+    title: 'UpdatedAt',
+    dataIndex: 'updatedat',
+    key: 'updatedat',
+  },
+  {
+    title: tags[0],
+    dataIndex: tags[0],
+    key: 'device1',
+  },
+  {
+    title: tags[1],
+    dataIndex: tags[1],
+    key: 'device2',
+  },
+];
+
+    function runApi(){
+  setInterval(() => {}, 1000);
+}
   return (
     <div>
       <TextField
@@ -66,8 +74,9 @@ function Device() {
             event.target.value = "";
           }
         }}
-      /><br/>
-<small>Hit enter to add device</small>
+      />
+      <br />
+      <small>Hit enter to add device</small>
       <ul className={classes.root}>
         {tags.map((tag) => (
           <li className="Tag" key={tag}>
@@ -75,22 +84,16 @@ function Device() {
           </li>
         ))}
       </ul>
-       <Button variant="contained" onClick={fetchApi} size="medium" color="primary">
-          Monitor
-        </Button>
-        {/* {Component} */}
-        {/* {Data ? {Data.map((datas)=>(<div>{datas}</div>))} : <p>Loading..</p>} */}
-         {/* {Data.map((datas)=>(<div>{datas}</div>))} */}
-{/* 
-        <table >
-  <tr>
-    {tags.map((tag)=>(<th>{tag}</th>))}
-    
-  </tr>
-  <tr>
-    {Data.map((datas)=>(<th>{datas}</th>))}
-  </tr>
-</table> */}
+      <Button
+        variant="contained"
+        onClick={fetchApi}
+        size="medium"
+        color="primary"
+      >
+        Monitor
+      </Button>
+       <Table dataSource={Data} columns={columns} />
+      {/* {Data} */}
     </div>
   );
 }

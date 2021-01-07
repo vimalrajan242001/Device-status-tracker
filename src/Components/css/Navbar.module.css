@@ -8,6 +8,9 @@
 .logo {
     color: tomato;
 }
+b{
+    color: black !important;
+}
 
 h2 {
     font-family: 'Andika New Basic',
